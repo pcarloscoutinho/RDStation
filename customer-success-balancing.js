@@ -7,22 +7,23 @@
 function customerSuccessBalancing(customerSuccess, customers, customerSuccessAway) {
   const availableCss = customerSuccess.filter((cs) => !customerSuccessAway.includes(cs.id));
 
-  var relationArray = [];
-  var copyArray = [];
-  customers.forEach((customer) => {
-    let diffArray = [];
-    availableCss.forEach((cs) => {
-      if (customer.score <= cs.score) {
-        diff = Math.abs(customer.score - cs.score);
+  let relationArray = [];
+  let copyArray = [];
 
-        diffArray.push({ csId: cs.id, diff: diff });
+  for (let i = 0; i < customers.length; i++) {
+    let diffArray = [];
+
+    for (let j = 0; j < availableCss.length; j++) {
+      if (customers[i].score <= availableCss[j].score) {
+        diff = Math.abs(customers[i].score - availableCss[j].score);
+        diffArray.push({ csId: availableCss[j].id, diff: diff });
       }
-    });
+    }
 
     copyArray = [...diffArray];
     diffArray.sort((firstDiff, secondDiff) => firstDiff.diff - secondDiff.diff);
-    relationArray.push({ customerId: customer.id, ...diffArray[0] });
-  });
+    relationArray.push({ customerId: customers[i].id, ...diffArray[0] });
+  }
 
   if (copyArray.length === 0) return 0;
 
